@@ -13,9 +13,19 @@ A simple Single Clock Domain FIFO written in SystemVerilog
 ## Simulating
 
 ### COCOTB
+Pre-requisites : 
+* Install [COCOTB](https://www.cocotb.org/).
+Optional:
+* Install [gtkwave](https://github.com/gtkwave/gtkwave#gtkwave).
 ```
-cd sim/cctb
-make
+cd sim/cctb && make
+```
+### Icarus Verilog
+Pre-requisites : 
+* Install [Icarus Verilog](https://github.com/steveicarus/iverilog?tab=readme-ov-file#the-icarus-verilog-compilation-system) simulator.
+* Install [gtkwave](https://github.com/gtkwave/gtkwave#gtkwave).
+```
+cd sim/sv && make all gui
 ```
   
 
