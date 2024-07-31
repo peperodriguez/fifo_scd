@@ -13,6 +13,9 @@ A simple Single Clock Domain FIFO written in SystemVerilog
 ## Simulating
 
 ### COCOTB
-TBD
+```
+cd sim/cctb
+make
+```
   
 
