@@ -1,16 +1,7 @@
-# This file is public domain, it can be freely copied without restrictions.
-# SPDX-License-Identifier: CC0-1.0
 import cocotb
 from cocotb.triggers import RisingEdge, FallingEdge, Timer
+from cocotb.clock import Clock
 
-
-async def generate_clock(dut):
-
-    for cycle in range(10):
-        dut.clk.value = 0
-        await Timer(1, units="ns")
-        dut.clk.value = 1
-        await Timer(1, units="ns")
 
 async def do_reset(dut):
 
@@ -19,29 +10,45 @@ async def do_reset(dut):
     dut.re.value = 0
     await Timer(3, units="ns")
     dut.rst_n.value = 1
-    await Timer(7, units="ns")
 
 async def do_write(dut, data=0):
 
-    await FallingEdge(dut.clk)  # wait for falling edge/"negedge"
+    await FallingEdge(dut.clk)
     dut.din.value = data
     dut.we.value = 1
     await RisingEdge(dut.clk)
     dut.we.value = 0
-    await FallingEdge(dut.clk)  # wait for falling edge/"negedge"
+    await FallingEdge(dut.clk)
+
+async def do_read(dut):
+
+    await FallingEdge(dut.clk)
+    dut.re.value = 1
+    await RisingEdge(dut.clk)
+    dut.re.value = 0
+    await FallingEdge(dut.clk)
 
 @cocotb.test()
 async def fifo_basic_test(dut):
-    """Try accessing the design."""
 
-    await cocotb.start(generate_clock(dut))  # run the clock "in the background"
-    await cocotb.start(do_reset(dut))        # assert reset
+    c = Clock(dut.clk,1,units="ns")
 
-    await Timer(4, units="ns")  # wait a bit
-    await FallingEdge(dut.clk)  # wait for falling edge/"negedge"
+    await cocotb.start(c.start())
+
+    await do_reset(dut)
+
+    await Timer(4, units="ns")
+    await FallingEdge(dut.clk)
 
     dut._log.info("Empty is %s", dut.empty.value)
     assert dut.full.value == 0, "FIFO shouldn't be full!"
+
     await Timer(2,units="ns")
-    await cocotb.start(do_write(dut,12))        # assert reset
-    await Timer(3,units="ns")
+
+    for i in range(10):
+        await do_write(dut,i)
+
+    for i in range(10):
+        await do_read(dut)
+
+    await Timer(10,units="ns")
