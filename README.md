@@ -7,6 +7,8 @@ A simple Single Clock Domain FIFO written in SystemVerilog
 * `tb`: Testbenches.
   * `tb/cctb/`: [COCOTB](https://www.cocotb.org/) testbench.
     * `tb/cctb/src/`: Python modules for the testbench.
+  * `tb/sv/`: Systemverilog testbench.
+    * `tb/sv/src`: Testbench sources.
 * `sim`: Simulation Makefiles and directories.
   * `sim/cctb`: [COCOTB](https://www.cocotb.org/) simulation directory.
  
@@ -15,6 +17,7 @@ A simple Single Clock Domain FIFO written in SystemVerilog
 ### COCOTB
 Pre-requisites : 
 * Install [COCOTB](https://www.cocotb.org/).
+
 Optional:
 * Install [gtkwave](https://github.com/gtkwave/gtkwave#gtkwave).
 ```
